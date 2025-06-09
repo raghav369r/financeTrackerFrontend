@@ -1,0 +1,41 @@
+<header class="flex justify-between container text-xl mx-auto m-4">
+  <h1>Add Transaction</h1>
+  <h1>Profile</h1>
+</header>
+<div class="flex justify-center items-center">
+  <form [formGroup]="transaction" class="h-[500x] w-[500px] rounded bg-neutral-100 border flex flex-col p-4 ">
+    <h1 class="font-semibold text-2xl text-center my-4">Add Transaction</h1>
+    <div class="m-3">
+      <label>Amount</label>
+      <input type="text" formControlName="amount" class="w-full rounded border p-1.5 "/>
+    </div>
+    <div class="m-3 flex flex-col">
+      <label>Type</label>
+      <select formControlName="type" class="p-1.5 border rounded w-full">
+        <option>Expense</option>
+        <option>Income</option>
+      </select>
+    </div>
+    <div class="m-3 flex flex-col">
+      <label>Category</label>
+      <select formControlName="category" class="p-1.5 border rounded w-full">
+        <option>Salary</option>
+        <option>Rent</option>
+        <option>Utility Bill</option>
+        <option>Restaurent</option>
+        <option>Transport</option>
+      </select>
+    </div>
+    <div class="m-3">
+      <label>Description</label>
+      <textarea formControlName="description" class="w-full rounded border p-1.5 "></textarea>
+    </div>
+    <div class="m-3">
+      <label>Date</label>
+      <input type="date" formControlName="date" class="w-full rounded border p-1.5 "/>
+    </div>
+    <button class="bg-blue-500 px-4 py-2 rounded text-white m-4 disabled:bg-gray-400 disabled:cursor-not-allowed" (click)="handleAdd()" [disabled]="transaction.invalid">
+      Add Transaction
+    </button>
+  </form>
+</div>
