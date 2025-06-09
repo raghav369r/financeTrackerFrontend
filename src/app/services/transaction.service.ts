@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import Transaction from '../models/Transaction';
+import Transaction from '../types/Transaction';
 import { BACKENDURL } from '../config/constants';
 import { Observable } from 'rxjs';
 

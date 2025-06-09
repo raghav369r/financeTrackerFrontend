@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
-import Transaction from '../../models/Transaction';
+import Transaction from '../../types/Transaction';
 import { CommonModule } from '@angular/common';
 
 @Component({
