@@ -1,0 +1,80 @@
+<div class="flex justify-center items-center w-full h-[100dvh]">
+  <form
+    [formGroup]="userDetails"
+    (ngSubmit)="handleSubmit()"
+    class="flex flex-col gap-4 p-4 border border-gray-200 shadow-md rounded min-w-[500px] max-w-6xl items-center bg-white"
+  >
+    <h1 class="text-4xl m-4">{{ isNewUser ? "Register" : "Login" }}</h1>
+
+    <div class="max-w-[300px] w-full" *ngIf="isNewUser">
+      <label class="grid">Full Name</label>
+      <input
+        #fullname="ngModel"
+        [(ngModel)]="fullName"
+        class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        type="text"
+      />
+      <div *ngIf="(fullname.touched || fullname.dirty) && fullName.length < 5">
+        <span class="text-red-500"
+          >FullName is required and must be of length atleast 5</span
+        >
+      </div>
+    </div>
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Email Address</label>
+      <input
+        class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        type="email"
+        formControlName="email"
+      />
+      <div
+        *ngIf="
+          userDetails.controls.email.errors &&
+          (userDetails.controls.email.dirty ||
+            userDetails.controls.email.touched)
+        "
+      >
+        <span class="text-red-500"
+          >Email is required and should be Valid!!</span
+        >
+      </div>
+    </div>
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Password</label>
+      <input
+        class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        type="password"
+        formControlName="password"
+      />
+      <div
+        *ngIf="
+          userDetails.controls.password.errors &&
+          (userDetails.controls.password.dirty ||
+            userDetails.controls.password.touched)
+        "
+      >
+        <span class="text-red-500"
+          >password is required and must be of length atleast 8</span
+        >
+      </div>
+    </div>
+
+    <button
+      class="bg-blue-500 rounded text-white px-4 py-1.5 min-w-[300px] cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+      [disabled]="!userDetails.valid || (isNewUser && fullName.length < 5)"
+    >
+      Login
+    </button>
+    <span class="text-red-500" *ngIf="submissionError != ''">{{
+      submissionError
+    }}</span>
+    <span
+      >{{ !isNewUser ? "Don't have an Account?" : "Already have an Account?" }}
+      <a
+        class="text-blue-500 cursor-pointer hover:underline"
+        (click)="handleUser()"
+        >{{ !isNewUser ? "Register" : "Login" }}</a
+      ></span
+    >
+  </form>
+</div>
