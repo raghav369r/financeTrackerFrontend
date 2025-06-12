@@ -72,9 +72,14 @@ export class LoginComponent {
         error: (err) => {
           if (err?.status == 400) this.submissionError = 'Validation Error!!';
           else if (err?.status == 401)
-            this.submissionError = 'invalid userName of password!!';
+            this.submissionError =
+              'Invalid userName and password Combination!!';
           else this.submissionError = 'Unknown error try again!!';
         },
       });
   };
+
+  preventEnter(event: Event) {
+    event.preventDefault();
+  }
 }

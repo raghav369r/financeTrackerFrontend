@@ -1,31 +1,102 @@
-<header class="flex justify-between container text-xl mx-auto m-4">
-  <h1>Transactions</h1>
-  <h1>Profile</h1>
-</header>
-<div class="container mx-auto">
-  <a routerLink="/addtransaction"
+<div *ngIf="updatePopUp">
+  <app-add-transaction
+    [transactionToEdit]="transactions[updatePopUp - 1]"
+    (closePopup)="handleclose()"
+    (updateUI)="updateUI(false, $event)"
+  />
+</div>
+<div *ngIf="addTransactionPopUp">
+  <app-add-transaction
+    (closePopup)="handleclose()"
+    (updateUI)="updateUI(true, $event)"
+  />
+</div>
+<div class="container mx-auto max-w-3xl">
+  <button
+    class="bg-blue-500 px-4 py-2 rounded text-white m-4"
+    (click)="handleAddTransaction()"
+  >
+    Add Transaction
+  </button>
+  <!-- <a routerLink="/addtransaction"
     ><button class="bg-blue-500 px-4 py-2 rounded text-white m-4">
       Add Transaction
     </button></a
-  >
-  <table>
-    <tbody>
-      <tr>
-        <th class="p-4 border">Date</th>
-        <th class="p-4 border">Type</th>
-        <th class="p-4 border">Category</th>
-        <th class="p-4 border">Decription</th>
-        <th class="p-4 border">Amount</th>
-        <!-- <th class="p-4 border">Actions</th> -->
+  > -->
+  <div class="flex gap-4 my-4">
+    <select
+      class="outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+      [(ngModel)]="type"
+      (change)="fetchTransactions()"
+    >
+      <option>All Types</option>
+      <option>Expense</option>
+      <option>Income</option>
+    </select>
+    <select
+      class="outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+      [(ngModel)]="category"
+      (change)="fetchTransactions()"
+    >
+      <option>All Categories</option>
+      <option>Salary</option>
+      <option>Rent</option>
+      <option>Budget</option>
+      <option>Restaurent</option>
+      <option>UtilityBill</option>
+      <option>Travel</option>
+      <option>Fuel</option>
+      <option>Others</option>
+    </select>
+    <input
+      type="date"
+      class="appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+      [(ngModel)]="date"
+      (change)="fetchTransactions()"
+    />
+  </div>
+  <table class="w-full appearance-none">
+    <thead>
+      <tr class="w-full text-gray-400">
+        <th class="p-4">Date</th>
+        <th class="p-4">Type</th>
+        <th class="p-4">Category</th>
+        <th class="p-4">Decription</th>
+        <th class="p-4">Amount</th>
+        <th class="p-4">Actions</th>
       </tr>
-      <tr *ngFor="let transaction of transactions">
-        <th class="p-4 border">{{transaction.date}}</th>
-        <th class="p-4 border">{{transaction.type}}</th>
-        <th class="p-4 border">{{transaction.category}}</th>
-        <th class="p-4 border">{{transaction.description}}</th>
-        <th class="p-4 border">{{transaction.amount}}</th>
-        <!-- <th class="p-4 border">{}</th> -->
+    </thead>
+    <tbody class="rounded-2xl shadow bg-white border border-neutral-200">
+      <tr
+        *ngFor="let transaction of transactions; let ind = index"
+        class="border-b border-neutral-200 text-center hover:bg-neutral-100"
+      >
+        <td class="p-4">{{ transaction.date }}</td>
+        <td class="p-4">{{ transaction.type }}</td>
+        <td class="p-4">{{ transaction.category }}</td>
+        <td class="p-4">{{ transaction.description }}</td>
+        <td class="p-4">₹{{ transaction.amount }}</td>
+        <td class="p-4 flex flex-wrap">
+          <button
+            class="px-4 py-1.5 rounded text-white bg-blue-500 mx-2 cursor-pointer"
+            (click)="handleUpdate(ind)"
+          >
+            Update
+          </button>
+          <button
+            class="px-4 py-1.5 rounded text-white bg-red-400 mx-2 cursor-pointer"
+            (click)="handleDelete(ind)"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
+  <h3 class="text-center" *ngIf="!transactions.length && fetchError == ''">
+    No Transactions Found!
+  </h3>
+  <span *ngIf="fetchError != ''" class="p-2 text-red-500 text-center">{{
+    fetchError
+  }}</span>
 </div>

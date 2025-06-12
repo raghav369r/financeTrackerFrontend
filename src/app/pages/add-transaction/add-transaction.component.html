@@ -1,41 +1,124 @@
-<header class="flex justify-between container text-xl mx-auto m-4">
-  <h1>Add Transaction</h1>
-  <h1>Profile</h1>
-</header>
-<div class="flex justify-center items-center">
-  <form [formGroup]="transaction" class="h-[500x] w-[500px] rounded bg-neutral-100 border flex flex-col p-4 ">
-    <h1 class="font-semibold text-2xl text-center my-4">Add Transaction</h1>
-    <div class="m-3">
-      <label>Amount</label>
-      <input type="text" formControlName="amount" class="w-full rounded border p-1.5 "/>
+<div class="fixed flex justify-center items-center w-full h-[100dvh] top-0 backdrop-blur">
+  <form
+    [formGroup]="transactionDetails"
+    (ngSubmit)="handleSave()"
+    (keydown.enter)="preventEnter($event)"
+    class="relative pb-10 p-3 flex flex-col gap-4 border border-gray-200 shadow-md rounded min-w-[500px] max-w-6xl items-center bg-white"
+  >
+    <button class="absolute p-4 right-0 w-fit top-0 text-2xl cursor-pointer" (click)="handleClose()">
+      X
+    </button>
+    <h1 class="text-4xl m-4">
+      {{ !transactionToEdit() ? "Add Transaction" : "Edit Transaction" }}
+    </h1>
+
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Amount</label>
+      <input
+        class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        type="number"
+        formControlName="amount"
+      />
+      <div
+        *ngIf="
+          transactionDetails.controls.amount.errors &&
+          (transactionDetails.controls.amount.dirty ||
+            transactionDetails.controls.amount.touched)
+        "
+      >
+        <span class="text-red-500"
+          >Amount is required and should be more than 0</span
+        >
+      </div>
     </div>
-    <div class="m-3 flex flex-col">
-      <label>Type</label>
-      <select formControlName="type" class="p-1.5 border rounded w-full">
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Type</label>
+      <select
+        class="w-full outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        formControlName="type"
+      >
         <option>Expense</option>
         <option>Income</option>
       </select>
+      <div
+        *ngIf="
+          transactionDetails.controls.type.errors &&
+          (transactionDetails.controls.type.dirty ||
+            transactionDetails.controls.type.touched)
+        "
+      >
+        <span class="text-red-500">Type is required</span>
+      </div>
     </div>
-    <div class="m-3 flex flex-col">
-      <label>Category</label>
-      <select formControlName="category" class="p-1.5 border rounded w-full">
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Category</label>
+      <select
+        class="w-full outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        formControlName="category"
+      >
         <option>Salary</option>
         <option>Rent</option>
-        <option>Utility Bill</option>
+        <option>Budget</option>
         <option>Restaurent</option>
-        <option>Transport</option>
+        <option>UtilityBill</option>
+        <option>Travel</option>
+        <option>Fuel</option>
+        <option>Others</option>
       </select>
+      <div
+        *ngIf="
+          transactionDetails.controls.category.errors &&
+          (transactionDetails.controls.category.dirty ||
+            transactionDetails.controls.category.touched)
+        "
+      >
+        <span class="text-red-500">Category is required</span>
+      </div>
     </div>
-    <div class="m-3">
-      <label>Description</label>
-      <textarea formControlName="description" class="w-full rounded border p-1.5 "></textarea>
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Description</label>
+      <input
+        class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        type="text"
+        formControlName="description"
+      />
+      <div
+        *ngIf="
+          transactionDetails.controls.description.errors &&
+          (transactionDetails.controls.description.dirty ||
+            transactionDetails.controls.description.touched)
+        "
+      >
+        <span class="text-red-500">Description is required</span>
+      </div>
     </div>
-    <div class="m-3">
-      <label>Date</label>
-      <input type="date" formControlName="date" class="w-full rounded border p-1.5 "/>
+    <div class="max-w-[300px] w-full">
+      <label class="grid">Date</label>
+      <input
+        class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
+        type="date"
+        formControlName="date"
+      />
+      <div
+        *ngIf="
+          transactionDetails.controls.date.errors &&
+          (transactionDetails.controls.date.dirty ||
+            transactionDetails.controls.date.touched)
+        "
+      >
+        <span class="text-red-500"
+          >Date is required and should be from future!!</span
+        >
+      </div>
     </div>
-    <button class="bg-blue-500 px-4 py-2 rounded text-white m-4 disabled:bg-gray-400 disabled:cursor-not-allowed" (click)="handleAdd()" [disabled]="transaction.invalid">
-      Add Transaction
+    <button
+      class="bg-blue-500 rounded text-white px-4 py-1.5 min-w-[300px] cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+      [disabled]="!transactionDetails.valid"
+    >
+      Save
     </button>
+    <span class="text-red-500" *ngIf="submissionError != ''">{{
+      submissionError
+    }}</span>
   </form>
 </div>

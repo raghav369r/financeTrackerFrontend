@@ -2,6 +2,7 @@
   <form
     [formGroup]="userDetails"
     (ngSubmit)="handleSubmit()"
+    (keydown.enter)="preventEnter($event)"
     class="flex flex-col gap-4 p-4 border border-gray-200 shadow-md rounded min-w-[500px] max-w-6xl items-center bg-white"
   >
     <h1 class="text-4xl m-4">{{ isNewUser ? "Register" : "Login" }}</h1>
