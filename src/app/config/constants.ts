@@ -1,1 +1,2 @@
-export const BACKENDURL="http://localhost:5211/api/";
+export const BACKENDURL = 'http://localhost:5211/api/';
+export const TOKEN = 'FT-TOKEN';

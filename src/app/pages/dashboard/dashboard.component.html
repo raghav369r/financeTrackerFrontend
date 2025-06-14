@@ -1,0 +1,33 @@
+<div class="container mx-auto max-w-3xl">
+  <div class="flex gap-5 mt-10">
+    <div class="p-3 rounded-2xl bg-white border border-neutral-200 flex-1">
+      <h3 class="text-gray-400 my-2 font-semibold">Total Income</h3>
+      <span class="text-2xl">₹{{report?.overallSummary?.[1]?.sum}}</span>
+    </div>
+    <div class="p-3 rounded-2xl bg-white border border-neutral-200 flex-1">
+      <h3 class="text-gray-400 my-2 font-semibold">Total Expense</h3>
+      <span class="text-2xl">₹{{report?.overallSummary?.[0]?.sum}}</span>
+    </div>
+    <div class="p-3 rounded-2xl bg-white border border-neutral-200 flex-1">
+      <h3 class="text-gray-400 my-2 font-semibold">Balance</h3>
+      <span class="text-2xl"
+        >₹{{(report?.overallSummary?.[1]?.sum || 0) - (report?.overallSummary?.[0]?.sum || 0)}}</span
+      >
+    </div>
+  </div>
+  <div
+    class="mt-10 p-3 rounded-2xl bg-white border border-neutral-200 "
+  >
+    <h2 class="p-3 text-xl">Expense Summary</h2>
+    <div class="m-h-[400px] m-h-[400px] flex justify-center">
+      <canvas id="forPie"></canvas>
+    </div>
+  </div>
+
+  <div
+    class="mt-10 p-3 rounded-2xl bg-white border border-neutral-200 flex flex-col justify-center"
+  >
+    <h2 class="p-3 text-xl">Monthly Summary</h2>
+    <canvas id="forBar"></canvas>
+  </div>
+</div>

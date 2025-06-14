@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { TOKEN } from '../../config/constants';
 
 @Component({
   selector: 'app-login',
@@ -38,13 +39,8 @@ export class LoginComponent {
   };
   handleSubmit = () => {
     this.submissionError = '';
-    console.log(
-      this.userDetails.valid,
-      this.isNewUser && this.fullName.length < 5
-    );
     if (!this.userDetails.valid || (this.isNewUser && this.fullName.length < 5))
       return;
-    console.log('here!!');
     if (this.isNewUser)
       this.userService
         .register({
@@ -53,7 +49,8 @@ export class LoginComponent {
         })
         .subscribe({
           next: (res) => {
-            localStorage.setItem('FT-TOKEN', res.token);
+            localStorage.setItem(TOKEN, res.token);
+            this.userService.updateSubject(res.token);
             this.router.navigateByUrl('/');
           },
           error: (err) => {
@@ -66,7 +63,8 @@ export class LoginComponent {
     else
       this.userService.login(this.userDetails.value).subscribe({
         next: (res) => {
-          localStorage.setItem('FT-TOKEN', res.token);
+          localStorage.setItem(TOKEN, res.token);
+          this.userService.updateSubject(res.token);
           this.router.navigateByUrl('/');
         },
         error: (err) => {

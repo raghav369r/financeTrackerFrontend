@@ -8,23 +8,23 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TransactionService {
-  URL = BACKENDURL + 'transaction';
+  private static readonly URL = BACKENDURL + 'transaction';
   constructor(private readonly httpClient: HttpClient) {}
   getAllTransactions(queryParams: any): Observable<Transaction[]> {
-    return this.httpClient.get<Transaction[]>(this.URL, {
+    return this.httpClient.get<Transaction[]>(TransactionService.URL, {
       params: queryParams,
     });
   }
 
   addTransaction(body: any): Observable<Transaction> {
-    return this.httpClient.post<Transaction>(this.URL, body);
+    return this.httpClient.post<Transaction>(TransactionService.URL, body);
   }
 
   updateTransaction(body: Transaction): Observable<Transaction> {
-    return this.httpClient.put<Transaction>(this.URL, body);
+    return this.httpClient.put<Transaction>(TransactionService.URL, body);
   }
 
   deleteTransaction(id: number): Observable<void> {
-    return this.httpClient.delete<void>(this.URL + `/${id}`);
+    return this.httpClient.delete<void>(TransactionService.URL + `/${id}`);
   }
 }

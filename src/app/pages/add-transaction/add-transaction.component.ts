@@ -72,7 +72,6 @@ export class AddTransactionComponent implements OnChanges {
   }
 
   handleSave() {
-    console.log('Saving...', this.transactionDetails.value);
     this.submissionError = '';
     if (this.transactionToEdit() == null) this.addTransaction();
     else this.updateTransaction();

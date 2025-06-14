@@ -1,1 +1,22 @@
-<header class="bg-neutral-200 h-14 shadow sticky top-0"></header>
+<header
+  class="bg-neutral-100 p-2 h-14 shadow sticky top-0 flex flex-col justify-center"
+  *ngIf="user != null"
+>
+  <nav class="flex justify-between container mx-auto max-w-3xl">
+    <ul class="flex gap-4">
+      <li><a routerLink="" class="">Transactions</a></li>
+      <li><a routerLink="dashboard" class="">Dashbaord</a></li>
+    </ul>
+    <div class="group relative">
+      <h2>Profile</h2>
+      <div
+        class="hidden group-hover:flex flex-col gap-3 items-center absolute border border-neutral-200 bg-neutral-100 rounded p-3 top-full right-0 min-w-[200px]"
+      >
+        <h1 class="text-gray-500">{{ user.email }}</h1>
+        <button (click)="handleLogout()" class="text-red-500 cursor-pointer">
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
