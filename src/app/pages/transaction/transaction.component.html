@@ -15,6 +15,7 @@
   <button
     class="bg-blue-500 px-4 py-2 rounded text-white m-4"
     (click)="handleAddTransaction()"
+    [disabled]="deletePopUp || addTransactionPopUp"
   >
     Add Transaction
   </button>
@@ -55,10 +56,10 @@
       (change)="fetchTransactions()"
     />
   </div>
-  <table class="w-full appearance-none">
+  <table class="w-full appearance-none overflow-x-scroll">
     <thead>
       <tr class="w-full text-gray-400">
-        <th class="p-4">Date</th>
+        <th class="p-4 min-w-32">Date</th>
         <th class="p-4">Type</th>
         <th class="p-4">Category</th>
         <th class="p-4">Decription</th>
@@ -70,13 +71,20 @@
       <tr
         *ngFor="let transaction of transactions; let ind = index"
         class="border-b border-neutral-200 text-center hover:bg-neutral-100"
+        [ngStyle]="{
+          'background-color': ind == 0 && addedOrUpdated ? '#F0FFFF' : 'inherit'
+        }"
       >
         <td class="p-4">{{ transaction.date }}</td>
         <td class="p-4">{{ transaction.type }}</td>
         <td class="p-4">{{ transaction.category }}</td>
-        <td class="p-4">{{ transaction.description }}</td>
+        <td
+          class="p-4 overflow-hidden overflow-ellipsis whitespace-nowrap max-w-32"
+        >
+          {{ transaction.description }}
+        </td>
         <td class="p-4">₹{{ transaction.amount }}</td>
-        <td class="p-4 flex flex-wrap">
+        <td class="p-4 flex">
           <button
             class="px-4 py-1.5 rounded text-white bg-blue-500 mx-2 cursor-pointer"
             (click)="handleUpdate(ind)"

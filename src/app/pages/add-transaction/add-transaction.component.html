@@ -1,11 +1,16 @@
-<div class="fixed flex justify-center items-center w-full h-[100dvh] top-0 backdrop-blur">
+<div
+  class="fixed flex justify-center items-center w-full h-[100dvh] top-0 backdrop-blur"
+>
   <form
     [formGroup]="transactionDetails"
     (ngSubmit)="handleSave()"
-    (keydown.enter)="preventEnter($event)"
     class="relative pb-10 p-3 flex flex-col gap-4 border border-gray-200 shadow-md rounded min-w-[500px] max-w-6xl items-center bg-white"
   >
-    <button class="absolute p-4 right-0 w-fit top-0 text-2xl cursor-pointer" (click)="handleClose()">
+    <button
+      class="absolute p-4 right-0 w-fit top-0 text-2xl cursor-pointer"
+      (click)="handleClose()"
+      type="button"
+    >
       X
     </button>
     <h1 class="text-4xl m-4">
@@ -27,7 +32,7 @@
         "
       >
         <span class="text-red-500"
-          >Amount is required and should be more than 0</span
+          >Amount is required and should be between 1 to 100000</span
         >
       </div>
     </div>
@@ -114,6 +119,7 @@
     <button
       class="bg-blue-500 rounded text-white px-4 py-1.5 min-w-[300px] cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
       [disabled]="!transactionDetails.valid"
+      type="submit"
     >
       Save
     </button>

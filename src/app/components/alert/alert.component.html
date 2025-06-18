@@ -1,0 +1,10 @@
+<div *ngIf="!!alert" class="z-10 fixed top-10 right-0 text-white min-w-[500px]">
+  <div
+    class="p-4 border border-gray-200 rounded flex justify-between"
+    [ngStyle]="{ 'background-color': color[alert.type] }"
+    style="background-color: col"
+  >
+    <span class="">{{ alert.message }}</span>
+    <button class="text-xm" (click)="closeAlert()">X</button>
+  </div>
+</div>

@@ -4,6 +4,7 @@ import Transaction from '../../types/Transaction';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
+import { HIGHLIGHT_SECONDS } from '../../config/constants';
 
 @Component({
   selector: 'app-transaction',
@@ -22,6 +23,7 @@ export class TransactionComponent implements OnInit {
   updatePopUp = 0;
   addTransactionPopUp = false;
   fetchError = '';
+  addedOrUpdated = false;
   fetchTransactions(): void {
     let queryParams: any = {};
     if (this.date) queryParams.date = this.date;
@@ -70,10 +72,13 @@ export class TransactionComponent implements OnInit {
     this.addTransactionPopUp = false;
   }
   updateUI(isNew: boolean, transaction: Transaction) {
+    this.addedOrUpdated = true;
+    setTimeout(() => (this.addedOrUpdated = false), HIGHLIGHT_SECONDS);
     if (isNew) this.transactions = [transaction, ...this.transactions];
     else
-      this.transactions = this.transactions.map((t) =>
-        t.id != transaction.id ? t : transaction
-      );
+      this.transactions = [
+        transaction,
+        ...this.transactions.filter((t) => t.id != transaction.id),
+      ];
   }
 }

@@ -39,6 +39,7 @@ export class AddTransactionComponent implements OnChanges {
     amount: new FormControl(this.transactionToEdit()?.amount || '', [
       Validators.required,
       Validators.min(1),
+      Validators.max(1e5),
     ]),
     type: new FormControl(this.transactionToEdit()?.type || null, [
       Validators.required,
@@ -72,6 +73,7 @@ export class AddTransactionComponent implements OnChanges {
   }
 
   handleSave() {
+    if (this.transactionDetails.invalid) return;
     this.submissionError = '';
     if (this.transactionToEdit() == null) this.addTransaction();
     else this.updateTransaction();
@@ -114,8 +116,5 @@ export class AddTransactionComponent implements OnChanges {
   }
   handleClose() {
     this.closePopup.emit();
-  }
-  preventEnter(event: Event) {
-    event.preventDefault();
   }
 }
