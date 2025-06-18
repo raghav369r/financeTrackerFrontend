@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { HIGHLIGHT_SECONDS } from '../../config/constants';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-transaction',
@@ -14,7 +15,10 @@ import { HIGHLIGHT_SECONDS } from '../../config/constants';
 })
 export class TransactionComponent implements OnInit {
   transactions: Transaction[] = [];
-  constructor(private readonly tService: TransactionService) {}
+  constructor(
+    private readonly tService: TransactionService,
+    private readonly alertService: AlertService
+  ) {}
 
   date: Date | null = null;
   type = 'All Types';
@@ -33,6 +37,10 @@ export class TransactionComponent implements OnInit {
     this.tService.getAllTransactions(queryParams).subscribe({
       next: (res) => (this.transactions = res),
       error: (ex) => {
+        this.alertService.setAlert({
+          type: 'error',
+          message: 'Error fetching Transactions!!',
+        });
         if (ex.status == 401)
           this.fetchError = 'Token missing or expired Login and try again!!';
         else if (ex.status == 400)
@@ -54,12 +62,19 @@ export class TransactionComponent implements OnInit {
     let transactionId = this.transactions[index].id;
     this.tService.deleteTransaction(transactionId as number).subscribe({
       next: (res) => {
+        this.alertService.setAlert({
+          type: 'success',
+          message: 'Transaction Deleted Suceessfully.',
+        });
         this.transactions = this.transactions.filter(
           (t) => t.id != transactionId
         );
       },
       error: (ex) => {
-        alert('Error deleting transaction!!, Try again later.');
+        this.alertService.setAlert({
+          type: 'error',
+          message: 'Error Deleting Transaction!!',
+        });
       },
     });
   }

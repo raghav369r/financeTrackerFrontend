@@ -14,9 +14,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { TransactionService } from '../../services/transaction.service';
-import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import Transaction from '../../types/Transaction';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -27,7 +27,7 @@ import Transaction from '../../types/Transaction';
 export class AddTransactionComponent implements OnChanges {
   constructor(
     private readonly tservice: TransactionService,
-    private readonly router: Router
+    private readonly alertService: AlertService
   ) {}
 
   closePopup = output<void>();
@@ -82,9 +82,17 @@ export class AddTransactionComponent implements OnChanges {
     this.tservice.addTransaction(this.transactionDetails.value).subscribe({
       next: (res) => {
         this.updateUI.emit(res);
+        this.alertService.setAlert({
+          type: 'success',
+          message: 'Transaction Created Suceessfully.',
+        });
         this.handleClose();
       },
       error: (ex) => {
+        this.alertService.setAlert({
+          type: 'error',
+          message: 'Error Creating Transaction!!',
+        });
         if (ex.status == 401)
           this.submissionError =
             'Token missing or expired Login and try again!!';
@@ -101,9 +109,17 @@ export class AddTransactionComponent implements OnChanges {
       .subscribe({
         next: (res) => {
           this.updateUI.emit(res);
+          this.alertService.setAlert({
+            type: 'success',
+            message: 'Transaction Updated Suceessfully.',
+          });
           this.handleClose();
         },
         error: (ex) => {
+          this.alertService.setAlert({
+            type: 'error',
+            message: 'Error Updating Transaction!!',
+          });
           if (ex.status == 401)
             this.submissionError =
               'Token missing or expired Login and try again!!';

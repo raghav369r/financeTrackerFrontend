@@ -10,6 +10,7 @@ import {
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { TOKEN } from '../../config/constants';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ import { TOKEN } from '../../config/constants';
 export class LoginComponent {
   constructor(
     private readonly router: Router,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly alertService: AlertService
   ) {}
 
   isNewUser = false;
@@ -49,11 +51,19 @@ export class LoginComponent {
         })
         .subscribe({
           next: (res) => {
+            this.alertService.setAlert({
+              type: 'success',
+              message: 'User Registered SuccessFully.',
+            });
             localStorage.setItem(TOKEN, res.token);
             this.userService.updateSubject(res.token);
             this.router.navigateByUrl('/');
           },
           error: (err) => {
+            this.alertService.setAlert({
+              type: 'error',
+              message: 'Error Registering User!!',
+            });
             if (err?.status == 400) this.submissionError = 'Validation Error!!';
             else if (err?.status == 401)
               this.submissionError = 'invalid userName of password!!';
@@ -63,11 +73,19 @@ export class LoginComponent {
     else
       this.userService.login(this.userDetails.value).subscribe({
         next: (res) => {
+          this.alertService.setAlert({
+            type: 'success',
+            message: 'Successfullly logged in.',
+          });
           localStorage.setItem(TOKEN, res.token);
           this.userService.updateSubject(res.token);
           this.router.navigateByUrl('/');
         },
         error: (err) => {
+          this.alertService.setAlert({
+            type: 'error',
+            message: 'Error Logging in!!',
+          });
           if (err?.status == 400) this.submissionError = 'Validation Error!!';
           else if (err?.status == 401)
             this.submissionError =
