@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReportsService } from '../../services/reports.service';
 import Report from '../../types/Report';
 import { Chart, ChartItem } from 'chart.js/auto';
+import { MONTH } from '../../config/constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,7 @@ import { Chart, ChartItem } from 'chart.js/auto';
 })
 export class DashboardComponent implements OnInit {
   report: Report | null = null;
+  currentMonth = MONTH[new Date().getMonth()];
   public constructor(private readonly reportService: ReportsService) {}
   fetchError = '';
   data: { label: string; value: number }[] = [];
@@ -52,7 +54,9 @@ export class DashboardComponent implements OnInit {
     new Chart(document.getElementById('forBar') as ChartItem, {
       type: 'bar',
       data: {
-        labels: this.report?.monthlySummary.map((r) => r.date),
+        labels: this.report?.monthlySummary.map((r) =>
+          new Date(r.date).getDate()
+        ),
         datasets: [
           {
             data: this.report?.monthlySummary.map((r) => r.expense),

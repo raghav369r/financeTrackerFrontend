@@ -1,10 +1,19 @@
-<div *ngIf="!!alert" class="z-10 fixed top-10 right-0 text-white min-w-[500px]">
+<div
+  *ngIf="alerts.length"
+  class="z-10 fixed top-10 right-0 text-white min-w-[500px]"
+>
   <div
+    *ngFor="let alert of alerts; let ind = index"
     class="p-4 border border-gray-200 rounded flex justify-between"
-    [ngStyle]="{ 'background-color': color[alert.type] }"
-    style="background-color: col"
+    [ngStyle]="{
+      'background-color': color[alert.type],
+      'z-index': alerts.length + 100 - ind
+    }"
   >
     <span class="">{{ alert.message }}</span>
-    <button class="text-xm" (click)="closeAlert()">X</button>
+    <button class="text-xm" (click)="closeAlert(ind)">
+      <span class="px-2" *ngIf="!ind">{{ remainingSeconds }}</span
+      >X
+    </button>
   </div>
 </div>
