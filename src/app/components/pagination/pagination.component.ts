@@ -1,5 +1,4 @@
-import { Component, Input, input } from '@angular/core';
-import { DEFAULT_PAGE_SIZE } from '../../config/constants';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
@@ -8,14 +7,15 @@ import { DEFAULT_PAGE_SIZE } from '../../config/constants';
   styleUrl: './pagination.component.css',
 })
 export class PaginationComponent {
-  page = 0;
-  items = DEFAULT_PAGE_SIZE;
+  page = input.required<number>();
   total = input.required<number>();
+  noofItems = input.required<number>();
+  setPage = output<number>();
   prevPage() {
-    this.page--;
+    this.setPage.emit(this.page() - 1);
   }
   nextPage() {
-    this.page++;
+    this.setPage.emit(this.page() + 1);
   }
   min(num1: number, num2: number) {
     return Math.min(num1, num2);

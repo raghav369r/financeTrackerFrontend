@@ -57,7 +57,7 @@
     />
   </div>
   <div class="w-full overflow-x-scroll">
-    <table class="appearance-none">
+    <table *ngIf="!loading" class="appearance-none">
       <thead>
         <tr class="text-gray-400">
           <th class="p-4 min-w-32">Date</th>
@@ -70,7 +70,10 @@
       </thead>
       <tbody class="rounded-2xl shadow bg-white border border-neutral-200">
         <tr
-          *ngFor="let transaction of transactions; let ind = index"
+          *ngFor="
+            let transaction of transactions | filter : page;
+            let ind = index
+          "
           class="border-b border-neutral-200 text-center hover:bg-neutral-100"
           [ngStyle]="{
             'background-color':
@@ -103,14 +106,24 @@
         </tr>
       </tbody>
     </table>
-    <h3 class="text-center" *ngIf="!transactions.length && fetchError == ''">
-      No Transactions Found!
-    </h3>
-    <div class="flex justify-end m-4" *ngIf="transactions.length > noofItems">
-      <app-pagination [total]="transactions.length" />
+    <div class="w-full text-center">
+      @if (loading) {<span class="p-2">Loading...</span>} @else if(fetchError !=
+      ''){ <span class="p-2 text-red-500">{{ fetchError }}</span
+      >} @else if(!transactions.length ){
+      <span>No Transactions Found!</span>
+      }
     </div>
-    <span *ngIf="fetchError != ''" class="p-2 text-red-500 text-center">{{
-      fetchError
-    }}</span>
+
+    <div
+      class="flex justify-end m-4"
+      *ngIf="transactions.length > noofItems && !loading"
+    >
+      <app-pagination
+        [page]="page"
+        [total]="transactions.length"
+        [noofItems]="noofItems"
+        (setPage)="setPage($event)"
+      />
+    </div>
   </div>
 </div>

@@ -4,9 +4,10 @@ import Transaction from '../../types/Transaction';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
-import { HIGHLIGHT_SECONDS } from '../../config/constants';
+import { DEFAULT_PAGE_SIZE, HIGHLIGHT_SECONDS } from '../../config/constants';
 import { AlertService } from '../../services/alert.service';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
+import { FilterPipe } from '../../pipes/filter.pipe';
 
 @Component({
   selector: 'app-transaction',
@@ -15,6 +16,7 @@ import { PaginationComponent } from '../../components/pagination/pagination.comp
     FormsModule,
     AddTransactionComponent,
     PaginationComponent,
+    FilterPipe,
   ],
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css',
@@ -34,17 +36,27 @@ export class TransactionComponent implements OnInit {
   addTransactionPopUp = false;
   fetchError = '';
   addedOrUpdated = false;
-  page = 1;
-  noofItems = 10;
+  page = 0;
+  noofItems = DEFAULT_PAGE_SIZE;
+  loading = false;
+  setPage(pageNumber: number) {
+    this.page = pageNumber;
+  }
   fetchTransactions(): void {
+    this.loading = true;
+    this.page = 0;
     let queryParams: any = {};
     if (this.date) queryParams.date = this.date;
     if (this.type != 'All Types') queryParams.type = this.type;
     if (this.category != 'All Categories') queryParams.category = this.category;
 
     this.tService.getAllTransactions(queryParams).subscribe({
-      next: (res) => (this.transactions = res),
+      next: (res) => {
+        this.loading = false;
+        this.transactions = res;
+      },
       error: (ex) => {
+        this.loading = false;
         this.alertService.setAlert({
           type: 'error',
           message: 'Error fetching Transactions!!',
