@@ -1,0 +1,20 @@
+<div class="flex">
+  <button
+    class="p-2 bg-gray-300 m-1 cursor-pointer disabled:cursor-not-allowed"
+    [disabled]="!page"
+    (click)="prevPage()"
+  >
+    <
+  </button>
+  <span
+    class="p-2 bg-gray-300 my-1"
+    >{{`${page*items+1} to ${min((page+1)*items,total())} of ${total()}`}}</span
+  >
+  <button
+    class="p-2 bg-gray-300 m-1 cursor-pointer disabled:cursor-not-allowed"
+    (click)="nextPage()"
+    [disabled]="(page + 1) * items >= total()"
+  >
+    >
+  </button>
+</div>

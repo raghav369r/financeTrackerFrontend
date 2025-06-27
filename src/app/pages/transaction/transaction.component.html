@@ -106,6 +106,9 @@
     <h3 class="text-center" *ngIf="!transactions.length && fetchError == ''">
       No Transactions Found!
     </h3>
+    <div class="flex justify-end m-4" *ngIf="transactions.length > noofItems">
+      <app-pagination [total]="transactions.length" />
+    </div>
     <span *ngIf="fetchError != ''" class="p-2 text-red-500 text-center">{{
       fetchError
     }}</span>

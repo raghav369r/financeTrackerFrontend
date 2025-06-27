@@ -6,10 +6,16 @@ import { FormsModule } from '@angular/forms';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { HIGHLIGHT_SECONDS } from '../../config/constants';
 import { AlertService } from '../../services/alert.service';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
 
 @Component({
   selector: 'app-transaction',
-  imports: [CommonModule, FormsModule, AddTransactionComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AddTransactionComponent,
+    PaginationComponent,
+  ],
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css',
 })
@@ -28,6 +34,8 @@ export class TransactionComponent implements OnInit {
   addTransactionPopUp = false;
   fetchError = '';
   addedOrUpdated = false;
+  page = 1;
+  noofItems = 10;
   fetchTransactions(): void {
     let queryParams: any = {};
     if (this.date) queryParams.date = this.date;
