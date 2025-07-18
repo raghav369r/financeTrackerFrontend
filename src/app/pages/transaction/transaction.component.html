@@ -13,7 +13,7 @@
 </div>
 <div class="w-full container mx-auto max-w-3xl">
   <button
-    class="bg-blue-500 px-4 py-2 rounded text-white m-4"
+    class="bg-blue-500 px-4 py-2 rounded text-white m-4 cursor-pointer"
     (click)="handleAddTransaction()"
     [disabled]="deletePopUp || addTransactionPopUp"
   >
@@ -53,6 +53,7 @@
       type="date"
       class="appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
       [(ngModel)]="date"
+      [max]="currDate"
       (change)="fetchTransactions()"
     />
   </div>
@@ -70,11 +71,8 @@
       </thead>
       <tbody class="rounded-2xl shadow bg-white border border-neutral-200">
         <tr
-          *ngFor="
-            let transaction of transactions | filter : page;
-            let ind = index
-          "
-          class="border-b border-neutral-200 text-center hover:bg-neutral-100"
+          *ngFor="let transaction of transactions; let ind = index"
+          class="border-b border-neutral-200 text-center"
           [ngStyle]="{
             'background-color':
               ind == 0 && addedOrUpdated ? '#F0FFFF' : 'inherit'
@@ -114,14 +112,11 @@
       }
     </div>
 
-    <div
-      class="flex justify-end m-4"
-      *ngIf="transactions.length > noofItems && !loading"
-    >
+    <div class="flex justify-end my-4" *ngIf="!loading">
       <app-pagination
-        [page]="page"
-        [total]="transactions.length"
-        [noofItems]="noofItems"
+        [pageInput]="page"
+        [totalInput]="totalTransactionCount"
+        [noofItemsInput]="noofItems"
         (setPage)="setPage($event)"
       />
     </div>

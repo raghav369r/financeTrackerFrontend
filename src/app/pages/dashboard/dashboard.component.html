@@ -2,16 +2,20 @@
   <div class="flex gap-5 mt-10">
     <div class="p-3 rounded-2xl bg-white border border-neutral-200 flex-1">
       <h3 class="text-gray-400 my-2 font-semibold">Total Income</h3>
-      <span class="text-2xl">₹{{report?.overallSummary?.[1]?.sum}}</span>
+      <span class="text-2xl"
+        >₹{{report?.overallSummary?.[1]?.sum | number:"1.2-2"}}</span
+      >
     </div>
     <div class="p-3 rounded-2xl bg-white border border-neutral-200 flex-1">
       <h3 class="text-gray-400 my-2 font-semibold">Total Expense</h3>
-      <span class="text-2xl">₹{{report?.overallSummary?.[0]?.sum}}</span>
+      <span class="text-2xl"
+        >₹{{report?.overallSummary?.[0]?.sum | number:"1.2-2"}}</span
+      >
     </div>
     <div class="p-3 rounded-2xl bg-white border border-neutral-200 flex-1">
       <h3 class="text-gray-400 my-2 font-semibold">Balance</h3>
       <span class="text-2xl"
-        >₹{{(report?.overallSummary?.[1]?.sum || 0) - (report?.overallSummary?.[0]?.sum || 0)}}</span
+        >₹{{(report?.overallSummary?.[1]?.sum || 0) - (report?.overallSummary?.[0]?.sum || 0) | number:"1.2-2"}}</span
       >
     </div>
   </div>

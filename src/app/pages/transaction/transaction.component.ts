@@ -7,7 +7,6 @@ import { AddTransactionComponent } from '../add-transaction/add-transaction.comp
 import { DEFAULT_PAGE_SIZE, HIGHLIGHT_SECONDS } from '../../config/constants';
 import { AlertService } from '../../services/alert.service';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
-import { FilterPipe } from '../../pipes/filter.pipe';
 
 @Component({
   selector: 'app-transaction',
@@ -16,13 +15,13 @@ import { FilterPipe } from '../../pipes/filter.pipe';
     FormsModule,
     AddTransactionComponent,
     PaginationComponent,
-    FilterPipe,
   ],
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css',
 })
 export class TransactionComponent implements OnInit {
   transactions: Transaction[] = [];
+  totalTransactionCount = 0;
   constructor(
     private readonly tService: TransactionService,
     private readonly alertService: AlertService
@@ -39,13 +38,14 @@ export class TransactionComponent implements OnInit {
   page = 0;
   noofItems = DEFAULT_PAGE_SIZE;
   loading = false;
+  currDate = new Date().toISOString().split('T')[0];
   setPage(pageNumber: number) {
     this.page = pageNumber;
+    this.fetchTransactions();
   }
   fetchTransactions(): void {
     this.loading = true;
-    this.page = 0;
-    let queryParams: any = {};
+    let queryParams: any = { page: this.page + 1 };
     if (this.date) queryParams.date = this.date;
     if (this.type != 'All Types') queryParams.type = this.type;
     if (this.category != 'All Categories') queryParams.category = this.category;
@@ -53,7 +53,10 @@ export class TransactionComponent implements OnInit {
     this.tService.getAllTransactions(queryParams).subscribe({
       next: (res) => {
         this.loading = false;
-        this.transactions = res;
+        this.transactions = res.transactions;
+        this.totalTransactionCount = res.totalCount;
+        if (this.totalTransactionCount < this.page * this.noofItems + 1)
+          this.page = Math.floor(this.totalTransactionCount / this.noofItems);
       },
       error: (ex) => {
         this.loading = false;
@@ -82,6 +85,7 @@ export class TransactionComponent implements OnInit {
     let transactionId = this.transactions[index].id;
     this.tService.deleteTransaction(transactionId as number).subscribe({
       next: (res) => {
+        this.totalTransactionCount--;
         this.alertService.setAlert({
           type: 'success',
           message: 'Transaction Deleted Suceessfully.',
@@ -89,6 +93,10 @@ export class TransactionComponent implements OnInit {
         this.transactions = this.transactions.filter(
           (t) => t.id != transactionId
         );
+        if (this.totalTransactionCount < this.page * this.noofItems + 1) {
+          this.page--;
+          this.fetchTransactions();
+        }
       },
       error: (ex) => {
         this.alertService.setAlert({
@@ -109,8 +117,10 @@ export class TransactionComponent implements OnInit {
   updateUI(isNew: boolean, transaction: Transaction) {
     this.addedOrUpdated = true;
     setTimeout(() => (this.addedOrUpdated = false), HIGHLIGHT_SECONDS);
-    if (isNew) this.transactions = [transaction, ...this.transactions];
-    else
+    if (isNew) {
+      this.totalTransactionCount++;
+      this.transactions = [transaction, ...this.transactions];
+    } else
       this.transactions = [
         transaction,
         ...this.transactions.filter((t) => t.id != transaction.id),

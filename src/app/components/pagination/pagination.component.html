@@ -1,19 +1,19 @@
 <div class="flex">
   <button
-    class="p-2 bg-gray-300 m-1 cursor-pointer disabled:cursor-not-allowed"
-    [disabled]="!page()"
+    class="p-2 bg-white shadow m-1 cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400"
+    [disabled]="!page"
     (click)="prevPage()"
   >
     <
   </button>
   <span
-    class="p-2 bg-gray-300 my-1"
-    >{{`${page()*noofItems()+1} to ${min((page()+1)*noofItems(),total())} of ${total()}`}}</span
+    class="p-2 bg-white shadow my-1 text-gray-400"
+    >{{`${page*noofItems+1} - ${min((page+1)*noofItems,total)} of ${total}`}}</span
   >
   <button
-    class="p-2 bg-gray-300 m-1 cursor-pointer disabled:cursor-not-allowed"
+    class="p-2 bg-white shadow m-1 cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400"
     (click)="nextPage()"
-    [disabled]="(page() + 1) * noofItems() >= total()"
+    [disabled]="(page + 1) * noofItems >= total"
   >
     >
   </button>

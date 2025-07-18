@@ -10,8 +10,13 @@ import { Observable } from 'rxjs';
 export class TransactionService {
   private static readonly URL = BACKENDURL + 'transaction';
   constructor(private readonly httpClient: HttpClient) {}
-  getAllTransactions(queryParams: any): Observable<Transaction[]> {
-    return this.httpClient.get<Transaction[]>(TransactionService.URL, {
+  getAllTransactions(
+    queryParams: any
+  ): Observable<{ transactions: Transaction[]; totalCount: number }> {
+    return this.httpClient.get<{
+      transactions: Transaction[];
+      totalCount: number;
+    }>(TransactionService.URL, {
       params: queryParams,
     });
   }

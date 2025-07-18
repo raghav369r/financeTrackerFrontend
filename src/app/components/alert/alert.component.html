@@ -4,7 +4,7 @@
 >
   <div
     *ngFor="let alert of alerts; let ind = index"
-    class="p-4 border border-gray-200 rounded flex justify-between"
+    class="p-4 border border-gray-200 rounded flex justify-between opacity-60 hover:opacity-100"
     [ngStyle]="{
       'background-color': color[alert.type],
       'z-index': alerts.length + 100 - ind

@@ -3,10 +3,11 @@ import { ReportsService } from '../../services/reports.service';
 import Report from '../../types/Report';
 import { Chart, ChartItem } from 'chart.js/auto';
 import { MONTH } from '../../config/constants';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -51,15 +52,20 @@ export class DashboardComponent implements OnInit {
       },
     });
 
+    const filteredReport = Array.from({ length: 31 }, (_, i) => ({
+      date: i + 1,
+      expense: 0,
+    }));
+    this.report?.monthlySummary.forEach(
+      (e) => (filteredReport[new Date(e.date).getDate()].expense = e.expense)
+    );
     new Chart(document.getElementById('forBar') as ChartItem, {
       type: 'bar',
       data: {
-        labels: this.report?.monthlySummary.map((r) =>
-          new Date(r.date).getDate()
-        ),
+        labels: filteredReport.map((r) => r.date),
         datasets: [
           {
-            data: this.report?.monthlySummary.map((r) => r.expense),
+            data: filteredReport.map((r) => r.expense),
           },
         ],
       },

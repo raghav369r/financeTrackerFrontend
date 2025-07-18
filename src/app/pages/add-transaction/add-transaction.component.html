@@ -103,6 +103,7 @@
         class="w-full appearance-none outline-none rounded px-2 py-1.5 bg-white border border-gray-300 focus:border-blue-500"
         type="date"
         formControlName="date"
+        [max]="currDate"
       />
       <div
         *ngIf="

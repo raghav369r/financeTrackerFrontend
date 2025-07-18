@@ -33,6 +33,7 @@ export class AddTransactionComponent implements OnChanges {
   closePopup = output<void>();
   transactionToEdit: InputSignal<Transaction> | InputSignal<null> = input(null);
   updateUI: OutputEmitterRef<Transaction> = output<Transaction>();
+  currDate = new Date().toISOString().split('T')[0];
   submissionError = '';
   transactionDetails = new FormGroup({
     id: new FormControl(this.transactionToEdit()?.id || 0),
