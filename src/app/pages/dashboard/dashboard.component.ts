@@ -1,3 +1,4 @@
+import * as XLSX from 'xlsx';
 import { Component, OnInit } from '@angular/core';
 import { ReportsService } from '../../services/reports.service';
 import Report from '../../types/Report';
@@ -55,16 +56,23 @@ export class DashboardComponent implements OnInit {
     const filteredReport = Array.from({ length: 31 }, (_, i) => ({
       date: i + 1,
       expense: 0,
+      income: 0,
     }));
-    this.report?.monthlySummary.forEach(
-      (e) => (filteredReport[new Date(e.date).getDate()].expense = e.expense)
-    );
+    this.report?.monthlySummary.forEach((e) => {
+      filteredReport[new Date(e.date).getDate() - 1].expense = e.expense;
+      filteredReport[new Date(e.date).getDate() - 1].income = e.income;
+    });
     new Chart(document.getElementById('forBar') as ChartItem, {
       type: 'bar',
       data: {
         labels: filteredReport.map((r) => r.date),
         datasets: [
           {
+            label: 'Income',
+            data: filteredReport.map((r) => r.income),
+          },
+          {
+            label: 'Expense',
             data: filteredReport.map((r) => r.expense),
           },
         ],
@@ -94,5 +102,16 @@ export class DashboardComponent implements OnInit {
         else this.fetchError = 'Unknown error try again!!';
       },
     });
+  }
+  
+  download() {
+    const expenseSummary = XLSX.utils.json_to_sheet(this.report?.expenseSummary!);
+    const monthlySummary = XLSX.utils.json_to_sheet(this.report?.monthlySummary!);
+    const overallSummary = XLSX.utils.json_to_sheet(this.report?.overallSummary!);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, expenseSummary, 'ExpenseSummary');
+    XLSX.utils.book_append_sheet(workbook, monthlySummary, 'MonthlySummary');
+    XLSX.utils.book_append_sheet(workbook, overallSummary, 'OverallSummary');
+    XLSX.writeFile(workbook, 'data1.xlsx');
   }
 }
